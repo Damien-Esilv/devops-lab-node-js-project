@@ -28,4 +28,20 @@ describe('errorHandler', () => {
     expect(res.statusCode).toBe(418)
     expect(res.body).toEqual({ error: true, message: 'teapot' })
   })
+
+  it('handles a null or undefined error without throwing', () => {
+    for (const err of [null, undefined]) {
+      const res = makeRes()
+      errorHandler(err, {}, res, () => {})
+      expect(res.statusCode).toBe(500)
+      expect(res.body).toEqual({ error: true, message: 'Internal Server Error' })
+    }
+  })
+
+  it('keeps the status and falls back to the default message', () => {
+    const res = makeRes()
+    errorHandler({ status: 404 }, {}, res, () => {})
+    expect(res.statusCode).toBe(404)
+    expect(res.body).toEqual({ error: true, message: 'Internal Server Error' })
+  })
 })
