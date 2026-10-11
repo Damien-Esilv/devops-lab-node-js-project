@@ -146,13 +146,17 @@ request, and the green conclusion.
 
 ### Confirmed remote result
 
-The CI run for commit `3adf7e9` completed successfully:
+The CI run for commit `3adf7e9` completed successfully. The pull request
+head is now the documentation commit `059f8fe`, and its check run also
+completed successfully:
 
 - **Workflow:** CI
 - **Run:** [GitHub Actions run 7](https://github.com/Damien-Esilv/devops-lab-node-js-project/actions/runs/38179323222)
 - **Job:** `build-and-test`
 - **Conclusion:** Success
 - **Pull request:** [PR #2](https://github.com/Damien-Esilv/devops-lab-node-js-project/pull/2)
+- **Latest checked commit:** `059f8fe`
+- **Latest check run:** [build-and-test job](https://github.com/Damien-Esilv/devops-lab-node-js-project/actions/runs/38179529301/job/114588942871)
 
 ## 7. Coverage artifact
 
@@ -193,6 +197,21 @@ coverage summary and the listed source files.]**
 
 The screenshot should make the green coverage indicators and all four
 threshold values readable.
+
+### Confirmed artifact inspection
+
+The GitHub Actions run contains the expected artifact:
+
+- **Artifact:** `coverage-report`
+- **Artifact ID:** `11716503330`
+- **Source workflow run:** `38179323222`
+- **Status:** Available and not expired
+- **Local verification:** the generated `coverage/index.html`,
+  `coverage/coverage-final.json`, and related HTML assets are present in the
+  project coverage directory.
+
+The HTML report confirms the same overall values recorded above:
+98% statements, 81.25% branches, 90% functions, and 100% lines.
 
 ## 8. Step 4 - Test results
 
@@ -262,12 +281,12 @@ successful build status.
 - [x] Coverage thresholds are configured and satisfied.
 - [x] Coverage report is generated in `coverage/`.
 - [x] CI workflow is present and configured to upload the coverage artifact.
-- [ ] Feature branch pushed to GitHub.
-- [ ] Pull request created and reviewed.
+- [x] Feature branch pushed to GitHub.
+- [x] Pull request exists and is open: [PR #2](https://github.com/Damien-Esilv/devops-lab-node-js-project/pull/2).
 - [x] CI run confirmed green on GitHub.
-- [ ] Coverage artifact downloaded and inspected.
+- [x] Coverage artifact located and inspected.
 - [ ] Jira Development panel confirmed.
 
-The remaining unchecked items require opening the GitHub artifact and Jira web
-interfaces. The pull request is open and mergeable; it should be merged only
-after review.
+The remaining unchecked item requires access to the Jira web interface. The
+pull request is open and mergeable, but it should be merged only after a
+reviewer has approved it.
