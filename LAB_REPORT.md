@@ -144,6 +144,16 @@ job marked successful and all workflow steps green.]**
 The screenshot should include the workflow run name, commit SHA, branch or pull
 request, and the green conclusion.
 
+### Confirmed remote result
+
+The CI run for commit `3adf7e9` completed successfully:
+
+- **Workflow:** CI
+- **Run:** [GitHub Actions run 7](https://github.com/Damien-Esilv/devops-lab-node-js-project/actions/runs/38179323222)
+- **Job:** `build-and-test`
+- **Conclusion:** Success
+- **Pull request:** [PR #2](https://github.com/Damien-Esilv/devops-lab-node-js-project/pull/2)
+
 ## 7. Coverage artifact
 
 After the workflow completes:
@@ -254,9 +264,10 @@ successful build status.
 - [x] CI workflow is present and configured to upload the coverage artifact.
 - [ ] Feature branch pushed to GitHub.
 - [ ] Pull request created and reviewed.
-- [ ] CI run confirmed green on GitHub.
+- [x] CI run confirmed green on GitHub.
 - [ ] Coverage artifact downloaded and inspected.
 - [ ] Jira Development panel confirmed.
 
-The unchecked items require access to the GitHub and Jira web interfaces and
-should be checked after the remote workflow has completed.
+The remaining unchecked items require opening the GitHub artifact and Jira web
+interfaces. The pull request is open and mergeable; it should be merged only
+after review.
