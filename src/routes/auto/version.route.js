@@ -9,14 +9,13 @@ import { fileURLToPath } from 'node:url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+const packagePath = path.join(__dirname, '..', '..', '..', 'package.json')
+const packageVersion = JSON.parse(fs.readFileSync(packagePath, 'utf-8')).version
 
 const router = Router()
 
 router.get('/version', (_req, res) => {
-  const pkg = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '..', '..', '..', 'package.json'), 'utf-8')
-  )
-  res.status(200).json({ version: pkg.version })
+  res.status(200).json({ version: packageVersion })
 })
 
 export default router
