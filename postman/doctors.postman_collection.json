@@ -1,0 +1,125 @@
+{
+  "info": {
+    "name": "Healthcare API Tests",
+    "description": "Lab 5 - Postman tests for the Healthcare API (doctors routes). Run `npm run dev` first.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" }
+  ],
+  "item": [
+    {
+      "name": "GET /api/doctors",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/doctors",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "doctors"]
+        },
+        "description": "Retrieve all doctors"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response is an array\", function () {",
+              "  pm.expect(pm.response.json()).to.be.an(\"array\");",
+              "});",
+              "",
+              "pm.test(\"Each doctor has id, name and specialty\", function () {",
+              "  pm.response.json().forEach(function (d) {",
+              "    pm.expect(d).to.have.all.keys(\"id\", \"name\", \"specialty\");",
+              "  });",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/doctors (valid)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Dr. Julie\",\n  \"specialty\": \"Neurology\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/doctors",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "doctors"]
+        },
+        "description": "Add a new doctor"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains the new doctor with an id\", function () {",
+              "  var body = pm.response.json();",
+              "  pm.expect(body).to.have.property(\"id\");",
+              "  pm.expect(body.name).to.eql(\"Dr. Julie\");",
+              "  pm.expect(body.specialty).to.eql(\"Neurology\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/doctors (missing specialty)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Dr. Julie\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/doctors",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "doctors"]
+        },
+        "description": "Invalid request: specialty is missing, expect 400"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "  pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Response contains an error\", function () {",
+              "  pm.expect(pm.response.json()).to.have.property(\"error\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
