@@ -53,11 +53,3 @@ console.log(`${patient.name.trim()} is treated by ${patient.doctor.name.trim()}`
 // Add a new condition dynamically (”anxiety”) and display the updated object.
 patient.conditions.push(' anxiety ')
 console.log(`Updated Patient Conditions: ${patient.conditions.map(condition => condition.trim()).join(', ')}`)
-
-
-// 2.5 Modularization 
-const patients = [
-  { id: 1, name: 'Alice', age: 34 },
-  { id: 2, name: 'John', age: 45 },
-  { id: 3, name: 'Marie', age: 29 }
-]
