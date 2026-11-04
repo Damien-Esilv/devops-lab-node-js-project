@@ -11,6 +11,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
 import { errorHandler } from './utils/errorHandler.js'
+import doctorsRouter from './routes/doctors.route.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -18,9 +19,15 @@ const require = createRequire(import.meta.url)
 
 const app = express()
 
+// Parse JSON request bodies before any route reads req.body
+app.use(express.json())
+
 // Simple root + health endpoints
 app.get('/', (_req, res) => res.json({ ok: true, message: 'Hello from CI/CD demo 👋' }))
 app.get('/health', (_req, res) => res.status(200).send('OK'))
+
+// API routes
+app.use('/api/doctors', doctorsRouter)
 
 // Auto-mount all routers placed under src/routes/auto
 const autoDir = path.join(__dirname, 'routes', 'auto')
