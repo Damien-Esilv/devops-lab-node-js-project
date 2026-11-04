@@ -11,6 +11,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
 import { errorHandler } from './utils/errorHandler.js'
+import metricsRouter from './routes/metrics.route.js'
 import doctorsRouter from './routes/doctors.route.js'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -27,6 +28,7 @@ app.get('/', (_req, res) => res.json({ ok: true, message: 'Hello from CI/CD demo
 app.get('/health', (_req, res) => res.status(200).send('OK'))
 
 // API routes
+app.use('/api/metrics', metricsRouter)
 app.use('/api/doctors', doctorsRouter)
 
 // Auto-mount all routers placed under src/routes/auto
