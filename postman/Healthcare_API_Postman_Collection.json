@@ -1,0 +1,63 @@
+{
+  "info": {
+    "_postman_id": "c1f2e3d4-5678-490a-bcde-f1234567890a",
+    "name": "Healthcare API Tests",
+    "description": "Collection de tests pour l'API Healthcare (Lab 5)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /api/metrics",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response is an object\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an(\"object\");",
+              "});",
+              "",
+              "pm.test(\"Response contains hospital metrics\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"hospital\");",
+              "    pm.expect(jsonData.hospital).to.have.property(\"name\");",
+              "    pm.expect(jsonData.hospital).to.have.property(\"totalBeds\");",
+              "    pm.expect(jsonData.hospital).to.have.property(\"availableBeds\");",
+              "});",
+              "",
+              "pm.test(\"Response contains system metrics\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"system\");",
+              "    pm.expect(jsonData.system.status).to.eql(\"healthy\");",
+              "    pm.expect(jsonData.system).to.have.property(\"uptime\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/metrics",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "metrics"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
