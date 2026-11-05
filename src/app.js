@@ -11,6 +11,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
 import { errorHandler } from './utils/errorHandler.js'
+import appointmentsRouter from './routes/appointments.route.js'
 import metricsRouter from './routes/metrics.route.js'
 import doctorsRouter from './routes/doctors.route.js'
 
@@ -19,6 +20,8 @@ const __dirname = path.dirname(__filename)
 const require = createRequire(import.meta.url)
 
 const app = express()
+app.use(express.json())
+app.use('/api/appointments', appointmentsRouter)
 
 // Parse JSON request bodies before any route reads req.body
 app.use(express.json())

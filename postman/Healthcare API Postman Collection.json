@@ -1,0 +1,169 @@
+{
+  "info": {
+    "name": "Healthcare API Tests",
+    "description": "Lab 5, Part 4 - personal route /api/appointments. Run in order against the local Express server. Uses fictional test data; appointments are stored in memory.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - GET appointments",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Response is an array\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments"
+          ]
+        }
+      }
+    },
+    {
+      "name": "02 - POST valid appointment",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", () => pm.response.to.have.status(201));",
+              "pm.test(\"Created appointment has an ID and submitted fields\", () => {",
+              "  const data = pm.response.json();",
+              "  pm.expect(data.id).to.be.a(\"number\").and.above(0);",
+              "  pm.expect(data).to.include({doctor:\"Dr. Lee\", patient:\"Alice\", date:\"2026-11-15\"});",
+              "  pm.collectionVariables.set(\"appointmentId\", data.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"doctor\": \"Dr. Lee\",\n  \"patient\": \"Alice\",\n  \"date\": \"2026-11-15\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments"
+          ]
+        }
+      }
+    },
+    {
+      "name": "03 - GET verifies saved appointment",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Response is an array\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));",
+              "pm.test(\"Created appointment is in the list\", () => {",
+              "  const id = Number(pm.collectionVariables.get(\"appointmentId\"));",
+              "  pm.expect(pm.response.json()).to.deep.include({id, doctor:\"Dr. Lee\", patient:\"Alice\", date:\"2026-11-15\"});",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments"
+          ]
+        }
+      }
+    },
+    {
+      "name": "04 - POST missing date returns 400",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Validation error is returned\", () => pm.expect(pm.response.json().error).to.be.a(\"string\").and.not.empty);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"doctor\": \"Dr. Lee\",\n  \"patient\": \"Alice\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments"
+          ]
+        }
+      }
+    }
+  ]
+}

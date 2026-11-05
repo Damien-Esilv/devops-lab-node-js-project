@@ -31,6 +31,22 @@ Open `coverage/index.html` for a visual coverage report (locally).
 - `GET /version` – returns `{ version }` from `package.json`
 - `GET /info` – returns `{ name, version, node, uptime }`
 - `GET /boom` – triggers an error to test the global error handler
+- `GET /api/appointments` – lists scheduled appointments
+- `POST /api/appointments` – schedules an appointment (201), or returns 400 for missing or invalid fields
+
+Appointments accept a JSON body with three non-empty strings:
+
+```json
+{
+  "doctor": "Dr. Lee",
+  "patient": "Alice",
+  "date": "2026-11-15"
+}
+```
+
+The response contains an automatically generated `id` and these three fields.
+Appointments are stored in memory and reset when the server restarts.
+The appointments router is registered explicitly in `src/app.js`, after the JSON body parser.
 
 Routes are **auto-mounted** from `src/routes/auto/*.route.js` so each student can add a file without touching `src/app.js` (fewer merge conflicts).
 
