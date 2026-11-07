@@ -1,0 +1,125 @@
+{
+  "info": {
+    "name": "Healthcare API Tests - Patients",
+    "description": "Lab 5 - Postman tests for the Healthcare API (patients routes). Run `npm run dev` first.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" }
+  ],
+  "item": [
+    {
+      "name": "GET /api/patients",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "patients"]
+        },
+        "description": "Retrieve all patients"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response is an array\", function () {",
+              "  pm.expect(pm.response.json()).to.be.an(\"array\");",
+              "});",
+              "",
+              "pm.test(\"Each patient has id, name and age\", function () {",
+              "  pm.response.json().forEach(function (p) {",
+              "    pm.expect(p).to.have.all.keys(\"id\", \"name\", \"age\");",
+              "  });",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/patients (valid)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alice\",\n  \"age\": 30\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "patients"]
+        },
+        "description": "Add a new patient"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains the new patient with an id\", function () {",
+              "  var body = pm.response.json();",
+              "  pm.expect(body).to.have.property(\"id\");",
+              "  pm.expect(body.name).to.eql(\"Alice\");",
+              "  pm.expect(body.age).to.eql(30);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/patients (missing age)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alice\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "patients"]
+        },
+        "description": "Invalid request: age is missing, expect 400"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "  pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Response contains an error\", function () {",
+              "  pm.expect(pm.response.json()).to.have.property(\"error\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

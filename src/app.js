@@ -14,27 +14,28 @@ import { errorHandler } from './utils/errorHandler.js'
 import appointmentsRouter from './routes/appointments.route.js'
 import metricsRouter from './routes/metrics.route.js'
 import doctorsRouter from './routes/doctors.route.js'
+import patientsRouter from './routes/patients.route.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const require = createRequire(import.meta.url)
 
 const app = express()
-app.use(express.json())
-app.use('/api/appointments', appointmentsRouter)
 
-// Parse JSON request bodies before any route reads req.body
+// 1. Parse JSON request bodies before any route reads req.body
 app.use(express.json())
 
-// Simple root + health endpoints
+// 2. Simple root + health endpoints
 app.get('/', (_req, res) => res.json({ ok: true, message: 'Hello from CI/CD demo 👋' }))
 app.get('/health', (_req, res) => res.status(200).send('OK'))
 
-// API routes
+// 3. API routes
+app.use('/api/appointments', appointmentsRouter)
 app.use('/api/metrics', metricsRouter)
 app.use('/api/doctors', doctorsRouter)
+app.use('/api/patients', patientsRouter) // <-- Added missing mount for patients
 
-// Auto-mount all routers placed under src/routes/auto
+// 4. Auto-mount all routers placed under src/routes/auto
 const autoDir = path.join(__dirname, 'routes', 'auto')
 if (fs.existsSync(autoDir)) {
   const files = fs.readdirSync(autoDir).filter(f => f.endsWith('.route.js'))
@@ -46,7 +47,7 @@ if (fs.existsSync(autoDir)) {
   }
 }
 
-// Global error middleware last
+// 5. Global error middleware last
 app.use(errorHandler)
 
 export default app
