@@ -16,3 +16,4 @@ router.post('/', (req, res) => {
   res.status(201).json(newPatient)
 })
 export default router
+//
